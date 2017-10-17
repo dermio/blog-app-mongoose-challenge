@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 
 const app = express();
 
+const {PORT, DATABASE_URL} = require('./config');
+
 mongoose.Promise = global.Promise;
 app.use(bodyParser.json());
 
