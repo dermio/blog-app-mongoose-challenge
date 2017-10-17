@@ -1,0 +1,12 @@
+{
+  "name": "blog-app-mongoose-challenge",
+  "version": "1.0.0",
+  "description": "Add Mongoose to blogging app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
