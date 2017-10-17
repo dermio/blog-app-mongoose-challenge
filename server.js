@@ -5,6 +5,6 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-app.use(process.env.PORT || 3000, function () {
-  res.send("hello world");
+app.listen(process.env.PORT || 3000, function () {
+  console.log(`Your app is listening on ${process.env.PORT || 3000}`);
 });
