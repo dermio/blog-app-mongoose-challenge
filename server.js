@@ -18,6 +18,6 @@ app.get("/:id", function (req, res) {
   res.send(`GET request, id: ${req.params.id}`);
 });
 
-app.listen(process.env.PORT || 3000, function () {
-  console.log(`Your app is listening on ${process.env.PORT || 3000}`);
+app.listen(PORT, function (req, res) {
+  console.log(`Your app is listening on ${PORT}`);
 });
