@@ -12,7 +12,13 @@ mongoose.Promise = global.Promise;
 app.use(bodyParser.json());
 
 app.get("/posts", function (req, res) {
-  res.send("The app is working. Hello World.");
+  //res.send("The app is working. Hello World.");
+  Blogpost.find()
+          .then(posts => res.json(posts))
+          .catch(err => {
+            console.error(error);
+            res.status(500).json({message: "Internal server error"});
+          });
 });
 
 app.get("/posts/:id", function (req, res) {
