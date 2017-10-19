@@ -14,7 +14,15 @@ app.use(bodyParser.json());
 app.get("/posts", function (req, res) {
   //res.send("The app is working. Hello World.");
   Blogpost.find()
-          .then(posts => res.json(posts))
+          .then(posts => {
+            // posts is the promise value returned from find().
+            // posts is an array of Documents from the Database
+            res.json({ // resp w/ JSON object with a `posts` key name
+              // call apiRepr method bound to the blogpostSchema in models.js
+              // this will return the document in the correct format
+              posts: posts.map(post => post.apiRepr())
+            });
+          })
           .catch(err => {
             console.error(error);
             res.status(500).json({message: "Internal server error"});
