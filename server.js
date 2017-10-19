@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-const {PORT, DATABASE_URL} = require('./config');
+const {PORT, DATABASE_URL} = require("./config");
+const {Blogpost} = require();
 
 mongoose.Promise = global.Promise;
 app.use(bodyParser.json());
