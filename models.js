@@ -6,8 +6,17 @@ const blogpostSchema = mongoose.Schema({
     firstName: String,
     lastName: String
   },
-  content: {type: String, required: true},
+  content: {type: String, required: true}
 });
+
+blogpostSchema.methods.apiRepr = function () {
+  return {
+    title: this.title,
+    content: this.content,
+    author: this.author.firstName + " " + this.author.lastName,
+    created: new Date().getTime()// is this right ???
+  };
+};
 
 const Blogpost = mongoose.model("Blogpost", blogpostSchema);
 
