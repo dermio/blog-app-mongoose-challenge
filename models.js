@@ -9,6 +9,13 @@ const blogpostSchema = mongoose.Schema({
   content: {type: String, required: true}
 });
 
+/* Ask Kristen about using a Virtual or Instance Method
+blogpostSchema.virtual("fullName").set(function (name) {
+  this.author.firstName = name.slice(0, name.indexOf(" "));
+  this.author.lastName = name.slice(name.indexOf(" ") + 1);
+});
+*/
+
 blogpostSchema.methods.apiRepr = function () {
   return {
     title: this.title,
