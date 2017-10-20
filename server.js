@@ -12,7 +12,6 @@ mongoose.Promise = global.Promise;
 app.use(bodyParser.json());
 
 app.get("/posts", function (req, res) {
-  //res.send("The app is working. Hello World.");
   Blogpost.find()
           .then(posts => {
             // posts is the promise value returned from find().
@@ -24,13 +23,21 @@ app.get("/posts", function (req, res) {
             });
           })
           .catch(err => {
-            console.error(error);
+            console.error(err);
             res.status(500).json({message: "Internal server error"});
           });
 });
 
 app.get("/posts/:id", function (req, res) {
-  res.send(`GET request, id: ${req.params.id}`);
+  //res.send(`GET request, id: ${req.params.id}`);
+  Blogpost.findById(req.params.id) // returns single Document by id
+          // post is the promise value returned from findById().
+          // post is a single Document from the Database
+          .then(post => res.json(post.apiRepr()))
+          .catch(err => {
+            console.error(err);
+            res.status(500).json({message: "Internal server error"});
+          });
 });
 
 app.post("/posts", function (req, res) {
