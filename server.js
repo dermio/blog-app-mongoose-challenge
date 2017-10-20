@@ -29,7 +29,6 @@ app.get("/posts", function (req, res) {
 });
 
 app.get("/posts/:id", function (req, res) {
-  //res.send(`GET request, id: ${req.params.id}`);
   Blogpost.findById(req.params.id) // returns single Document by id
           // post is the promise value returned from findById().
           // post is a single Document from the Database
@@ -41,7 +40,30 @@ app.get("/posts/:id", function (req, res) {
 });
 
 app.post("/posts", function (req, res) {
-  res.send(`POST request made`);
+  // validation of required fields for creating posts
+  let requiredFields = ["title", "content", "author"];
+  for (let i = 0; i < requiredFields.length; i++) {
+    let field = requiredFields[i];
+    if (!(field in req.body)) {
+      let message = `Missing \`${field}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+  
+  Blogpost.create({
+            title: req.body.title,
+            content: req.body.content,
+            author: { // try to use Virtual method to split author name?
+              firstName: req.body.author.split(" ")[0],
+              lastName: req.body.author.split(" ")[1]
+            }
+          })
+          .then(post => res.status(201).json(post.apiRepr()))
+          .catch(err => {
+            console.error(err);
+            res.status(500).json({message: "Internal server error"});
+          });
 });
 
 app.put("/posts/:id", function (req, res) {
