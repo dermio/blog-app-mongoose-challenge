@@ -21,7 +21,7 @@ blogpostSchema.methods.apiRepr = function () {
     title: this.title,
     content: this.content,
     author: this.author.firstName + " " + this.author.lastName,
-    created: new Date().getTime().toString() // is this right ???
+    created: Date.now().toString() // is this right ???
   };
 };
 
