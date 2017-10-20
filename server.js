@@ -96,7 +96,12 @@ app.put("/posts/:id", function (req, res) {
 });
 
 app.delete("/posts/:id", function (req, res) {
-  res.send(`DELETE request, id: ${req.params.id}`);
+  res.status(204).send(`DELETE request, id: ${req.params.id}`);
+  Blogpost.findByIdAndRemove(req.params.id)
+          .then(() => res.status(204).end())
+          .catch(
+            err => res.status(500).json({message: "Internal service error"})
+          );
 });
 
 
