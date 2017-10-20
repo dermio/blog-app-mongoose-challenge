@@ -10,10 +10,14 @@ const blogpostSchema = mongoose.Schema({
 });
 
 /* Ask Kristen about using a Virtual or Instance Method
-blogpostSchema.virtual("fullName").set(function (name) {
-  this.author.firstName = name.slice(0, name.indexOf(" "));
-  this.author.lastName = name.slice(name.indexOf(" ") + 1);
-});
+blogpostSchema.virtual("fullName")
+  .get(function () {
+    return this.author.firstName + " " + this.author.lastName;
+  })
+  .set(function (name) {
+    this.author.firstName = name.slice(0, name.indexOf(" "));
+    this.author.lastName = name.slice(name.indexOf(" ") + 1);
+  });
 */
 
 blogpostSchema.methods.apiRepr = function () {
