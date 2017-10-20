@@ -47,6 +47,7 @@ app.post("/posts", function (req, res) {
     if (!(field in req.body)) {
       let message = `Missing \`${field}\` in request body`;
       console.error(message);
+      // return breaks out of function
       return res.status(400).send(message);
     }
   }
@@ -67,7 +68,31 @@ app.post("/posts", function (req, res) {
 });
 
 app.put("/posts/:id", function (req, res) {
-  res.send(`PUT request, id: ${req.params.id}`);
+  // validate the Id in the request body and route url are the same
+  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
+    let message = `Request path id (${req.params.id}) and ` +
+                  `request body id (${req.body.id}) must match`;
+    console.error(message);
+    // return breaks out of function
+    return res.status(400).json({message: message});
+  }
+  //res.send(`PUT request, id: ${req.params.id}`);
+
+  let toUpdate = {};
+  let updateableFields = ["title", "content", "author"];
+
+  // any fields that are submitted in the PUT request will be updated
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      toUpdate[field] = req.body[field];
+    }
+  });
+
+  Blogpost.findByIdAndUpdate(req.params.id, {$set: toUpdate}) // $set ?
+          .then(post => res.status(201).json(post.apiRepr()))
+          .catch(
+            err => res.status(500).json({message: "Internal service error"})
+          );
 });
 
 app.delete("/posts/:id", function (req, res) {
@@ -100,7 +125,7 @@ function runServer(databaseUrl=DATABASE_URL, port=PORT) {
         console.log(`Your app is listening on port ${port}`);
         resolve();
       })
-      .on('error', err => {
+      .on("error", err => {
         mongoose.disconnect();
         reject(err);
       });
@@ -113,7 +138,7 @@ function runServer(databaseUrl=DATABASE_URL, port=PORT) {
 function closeServer() {
   return mongoose.disconnect().then(() => {
      return new Promise((resolve, reject) => {
-       console.log('Closing server');
+       console.log("Closing server");
        server.close(err => {
            if (err) {
                return reject(err);
