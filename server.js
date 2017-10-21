@@ -55,10 +55,13 @@ app.post("/posts", function (req, res) {
   Blogpost.create({
             title: req.body.title,
             content: req.body.content,
+            /* My version is Wrong
             author: { // try to use Virtual method to split author name?
               firstName: req.body.author.split(" ")[0],
               lastName: req.body.author.split(" ")[1]
             }
+            */
+            author: req.body.author
           })
           .then(post => res.status(201).json(post.apiRepr()))
           .catch(err => {
@@ -88,7 +91,8 @@ app.put("/posts/:id", function (req, res) {
     }
   });
 
-  Blogpost.findByIdAndUpdate(req.params.id, {$set: toUpdate}) // $set ?
+  // What is $set? What is {new: true}? Not in docs
+  Blogpost.findByIdAndUpdate(req.params.id, {$set: toUpdate}, {new: true})
           .then(post => res.status(201).json(post.apiRepr()))
           .catch(
             err => res.status(500).json({message: "Internal service error"})
@@ -96,14 +100,20 @@ app.put("/posts/:id", function (req, res) {
 });
 
 app.delete("/posts/:id", function (req, res) {
-  res.status(204).send(`DELETE request, id: ${req.params.id}`);
   Blogpost.findByIdAndRemove(req.params.id)
-          .then(() => res.status(204).end())
+          .then(() => {
+            console.log(`Deleted blog post with id \`${req.params.ID}\``);
+            res.status(204).end()
+          })
           .catch(
             err => res.status(500).json({message: "Internal service error"})
           );
 });
 
+// catch-all endpoint if client makes request to non-existent endpoint
+app.use('*', function(req, res) {
+  res.status(404).json({message: 'Not Found'});
+});
 
 /*
 app.listen(PORT, function () {
