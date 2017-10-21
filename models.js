@@ -10,8 +10,8 @@ const blogpostSchema = mongoose.Schema({
   created: {type: Date, default: Date.now} // Thinkful's code
 });
 
-// Thinful's virtual and apiRepr method solution
-blogpostSchema.virtual('authorName').get(function() {
+// Thinkful's virtual and apiRepr method solution
+blogpostSchema.virtual("authorName").get(function() {
   return `${this.author.firstName} ${this.author.lastName}`.trim();
 });
 
@@ -36,9 +36,9 @@ blogpostSchema.virtual("fullName")
     this.author.firstName = name.slice(0, name.indexOf(" "));
     this.author.lastName = name.slice(name.indexOf(" ") + 1);
   });
-*/
 
-/* My old apiRepr method solution
+
+// My old apiRepr method solution
 blogpostSchema.methods.apiRepr = function () {
   return {
     title: this.title,
