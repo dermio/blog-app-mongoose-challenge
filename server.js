@@ -171,3 +171,8 @@ if (require.main === module) {
 };
 
 module.exports = {app, runServer, closeServer};
+
+/*
+Thinkful's soluton
+https://github.com/Thinkful-Ed/blog-app-mongoose-challenge-solution
+*/
