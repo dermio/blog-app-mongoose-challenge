@@ -6,8 +6,26 @@ const blogpostSchema = mongoose.Schema({
     firstName: String,
     lastName: String
   },
-  content: {type: String, required: true}
+  content: {type: String, required: true},
+  created: {type: Date, default: Date.now} // Thinkful's code
 });
+
+// Thinful's virtual and apiRepr method solution
+blogpostSchema.virtual('authorName').get(function() {
+  return `${this.author.firstName} ${this.author.lastName}`.trim();
+});
+
+blogpostSchema.methods.apiRepr = function() {
+  return {
+    id: this._id,
+    // I thought about referencing the full name using a Virtual,
+    // then using the Virtual inside the apiRepr!!! bleh
+    author: this.authorName,
+    content: this.content,
+    title: this.title,
+    created: this.created
+  };
+}
 
 /* Ask Kristen about using a Virtual or Instance Method
 blogpostSchema.virtual("fullName")
@@ -20,6 +38,7 @@ blogpostSchema.virtual("fullName")
   });
 */
 
+/* My old apiRepr method solution
 blogpostSchema.methods.apiRepr = function () {
   return {
     title: this.title,
@@ -28,6 +47,7 @@ blogpostSchema.methods.apiRepr = function () {
     created: Date.now().toString() // is this right ???
   };
 };
+*/
 
 const Blogpost = mongoose.model("Blogpost", blogpostSchema);
 
